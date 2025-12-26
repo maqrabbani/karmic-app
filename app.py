@@ -3,13 +3,27 @@ import pandas as pd
 import numpy as np
 
 # ==========================================
-# 1. SETUP & CONFIGURATION
+# 1. SETUP & DESIGN OVERRIDES
 # ==========================================
 st.set_page_config(page_title="Karmic Seed Pricing Simulator", layout="wide")
+
+# --- CUSTOM CSS FOR WHITE SIDEBAR ---
+# This block forces the sidebar background to be white so your logo blends in.
+st.markdown("""
+<style>
+    [data-testid="stSidebar"] {
+        background-color: #FFFFFF;
+    }
+    [data-testid="stSidebarUserContent"] {
+        background-color: #FFFFFF;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 st.title("🌱 Karmic Seed: Pricing Decision Support Tool")
 
 # ==========================================
-# 2. DATA LOADER (The "Brain")
+# 2. DATA LOADER (The Brain)
 # ==========================================
 @st.cache_data
 def load_and_prep_data():
@@ -48,7 +62,8 @@ def load_and_prep_data():
     df_inventory['Days_of_Supply'] = df_inventory['days-of-supply'].apply(clean_numeric)
 
     # Sales Aggregation for Return Rate Calc
-    df_sales['Units Ordered'] = df_sales['Units Ordered'].astype(float)
+    # Ensure 'Units Ordered' is numeric
+    df_sales['Units Ordered'] = pd.to_numeric(df_sales['Units Ordered'], errors='coerce').fillna(0)
     sales_agg = df_sales.groupby('SKU')['Units Ordered'].sum().reset_index()
 
     # Merging
@@ -66,13 +81,30 @@ def load_and_prep_data():
 df_master = load_and_prep_data()
 
 # ==========================================
-# 3. SIDEBAR: SELECT YOUR REAL SKU
+# 3. SIDEBAR: LOGO & SELECTOR
 # ==========================================
-st.sidebar.image("logo.png", width=200)
+# Try to load logo, otherwise fall back to text
+try:
+    # Width 250px usually looks best for sidebars
+    st.sidebar.image("logo.png", width=250)
+except:
+    st.sidebar.header("🌱 Karmic Seed")
+
+st.sidebar.markdown("### 🛒 Product Simulator")
+
+# Defaults
+default_cost = 15.0
+default_price = 22.0
+default_comp = 25.0
+default_min_margin = 20.0
+default_target_margin = 40.0
+default_inventory = 45.0
+default_returns = 2.5
+
 if not df_master.empty:
     # Dropdown to select a real SKU
     sku_list = df_master['SKU'].unique().tolist()
-    selected_sku = st.sidebar.selectbox("Select a Product:", sku_list)
+    selected_sku = st.sidebar.selectbox("Choose SKU to Simulate:", sku_list)
     
     # Get data for that SKU
     sku_data = df_master[df_master['SKU'] == selected_sku].iloc[0]
@@ -85,20 +117,11 @@ if not df_master.empty:
     default_target_margin = float(sku_data['Target_Margin'])
     default_inventory = float(sku_data['Days_of_Supply'])
     default_returns = float(sku_data['Return_Rate'])
-else:
-    st.sidebar.warning("Using dummy data (CSVs failed load)")
-    default_cost = 15.0
-    default_price = 22.0
-    default_comp = 25.0
-    default_min_margin = 20.0
-    default_target_margin = 40.0
-    default_inventory = 45.0
-    default_returns = 2.5
 
 st.sidebar.markdown("---")
-st.sidebar.info("👇 Adjust these to test 'What-If' scenarios")
+st.sidebar.info("👇 Adjust parameters to test 'What-If' scenarios")
 
-# Input widgets (Pre-filled with Real Data)
+# Input widgets
 cost_input = st.sidebar.number_input("True Unit Cost ($)", value=default_cost, step=0.50)
 curr_price_input = st.sidebar.number_input("Current Selling Price ($)", value=default_price, step=0.50)
 comp_price_input = st.sidebar.number_input("Avg Competitor Price ($)", value=default_comp, step=0.50)
@@ -118,25 +141,33 @@ def calculate_recommendation(cost, current_price, competitor_price, min_margin, 
     if current_price == 0: return 0, "ERROR", "Price is 0", 0
     
     margin_current = (current_price - cost) / current_price
-    min_price = cost / (1 - (min_margin/100))
-    target_price = cost / (1 - (target_margin/100))
+    min_price_target = cost / (1 - (min_margin/100))
+    target_price_ideal = cost / (1 - (target_margin/100))
     
     strategy = "MAINTAIN"
     rec_price = current_price
     
     # Logic Tree
+    # 1. Block High Returns
     if returns_pct > 8.0:
         return current_price, "⛔ BLOCKED (High Returns)", "Fix Quality First", margin_current
-        
-    if current_price < min_price:
+    
+    # 2. Profit Recovery (Strict Floor)
+    if current_price < min_price_target:
         strategy = "📈 PROFIT RECOVERY"
-        rec_price = min_price 
+        rec_price = min_price_target
+        
+    # 3. Liquidate (Inventory Pressure)
     elif inventory_days > 120:
         strategy = "📉 LIQUIDATE"
+        # Don't go below cost if possible, but move stock
         rec_price = max(cost * 1.05, competitor_price * 0.95)
+        
+    # 4. Market Catch-Up (Optimize)
     elif current_price < (competitor_price - 1.0) and margin_current < (target_margin/100):
         strategy = "🚀 MARKET CATCH-UP"
-        rec_price = min(target_price, competitor_price - 0.50)
+        # Move toward ideal, but respect competitor ceiling
+        rec_price = min(target_price_ideal, competitor_price - 0.50)
         
     return round(rec_price, 2), strategy, "optimize margin", margin_current
 
@@ -167,9 +198,14 @@ if st.button("Run Analysis", type="primary"):
     
     with col_chart:
         st.subheader("Price Position")
+        
+        # Calculate floors/ceilings for chart
+        min_floor = cost_input/(1-min_margin_input/100)
+        target_ideal = cost_input/(1-target_margin_input/100)
+        
         chart_df = pd.DataFrame({
             'Metric': ['Unit Cost', 'Min Margin Floor', 'Current Price', 'Target Ideal', 'Competitor Avg'],
-            'Price ($)': [cost_input, cost_input/(1-min_margin_input/100), curr_price_input, cost_input/(1-target_margin_input/100), comp_price_input]
+            'Price ($)': [cost_input, min_floor, curr_price_input, target_ideal, comp_price_input]
         })
         st.bar_chart(chart_df.set_index('Metric'))
 
@@ -177,14 +213,21 @@ if st.button("Run Analysis", type="primary"):
         st.subheader("Why this price?")
         st.write(f"""
         - **Cost Basis:** ${cost_input:.2f}
-        - **Floor Price (Min Margin):** ${cost_input/(1-min_margin_input/100):.2f}
+        - **Min Margin Floor:** ${cost_input/(1-min_margin_input/100):.2f}
         - **Competitor Anchor:** ${comp_price_input:.2f}
         - **Inventory Health:** {inventory_input} days
         """)
+        
         if "RECOVERY" in strategy:
             st.warning(f"⚠️ Your current price is below the {min_margin_input}% margin floor. We must raise it.")
         elif "BLOCKED" in strategy:
             st.error(f"🛑 Returns are {returns_input}% (Critical > 8%). Do not raise price.")
+        elif "LIQUIDATE" in strategy:
+            st.info("📉 Inventory is too high (>120 days). Lowering price to improve velocity.")
+        elif "CATCH-UP" in strategy:
+            st.success("✅ Profitable & Underpriced. Safe to raise price slightly.")
+        else:
+            st.info("👌 Price is optimal. Maintain current strategy.")
 
 else:
     st.info("👈 Select a SKU from the sidebar to load its real data.")
