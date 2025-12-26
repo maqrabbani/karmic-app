@@ -100,7 +100,7 @@ try:
 except:
     st.sidebar.header("🌱 Karmic Seed")
 
-# st.sidebar.markdown("### 🛒 Product Simulator")
+st.sidebar.markdown("### 🛒 Product Simulator")
 
 # Defaults
 default_cost = 15.0
