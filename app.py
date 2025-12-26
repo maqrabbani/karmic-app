@@ -19,7 +19,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🌱 Karmic Seed: Pricing Decision Support Tool")
+st.title("Karmic Seed: Pricing Decision Support Tool")
 
 # ==========================================
 # 2. DATA LOADER (The Brain)
@@ -100,7 +100,7 @@ try:
 except:
     st.sidebar.header("🌱 Karmic Seed")
 
-st.sidebar.markdown("### 🛒 Product Simulator")
+# st.sidebar.markdown("### 🛒 Product Simulator")
 
 # Defaults
 default_cost = 15.0
