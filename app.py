@@ -8,7 +8,6 @@ import numpy as np
 st.set_page_config(page_title="Karmic Seed Pricing Simulator", layout="wide")
 
 # --- CUSTOM CSS FOR WHITE SIDEBAR ---
-# This block forces the sidebar background to be white so your logo blends in.
 st.markdown("""
 <style>
     [data-testid="stSidebar"] {
@@ -38,31 +37,44 @@ def load_and_prep_data():
         st.error("❌ CSV files not found. Please place Pricing_Data.csv, Competitor_Data.csv, etc. in the same folder.")
         return pd.DataFrame()
 
-    # Helpers
+    # --- FIXED CLEANING HELPERS ---
+    # These now handle both Text ("$5.00") and Numbers (5.0) correctly
     def clean_currency(x):
         if isinstance(x, str): return float(x.replace('$', '').replace(',', '').strip())
-        return x
+        return float(x)
+    
     def clean_percent(x):
         if isinstance(x, str): return float(x.replace('%', '').strip())
-        return 0.0
+        return float(x)
+        
     def clean_numeric(x):
-        if isinstance(x, str): return float(x.replace(',', '').strip())
-        return 0.0
+        if isinstance(x, str): 
+            x = x.replace(',', '').strip()
+            if x in ['-', '']: return 0.0
+            return float(x)
+        return float(x)
 
     # Cleaning
     df_pricing['True_Unit_Cost'] = df_pricing['True_Unit_Cost'].apply(clean_currency)
     df_pricing['Current_Price'] = df_pricing['Current_Price'].apply(clean_currency)
+    # Handle percentage scaling (e.g. 20 vs 0.20)
     df_pricing['Min_Margin'] = df_pricing['Minimum_Acceptable_Margin_%'].apply(clean_percent)
     df_pricing['Target_Margin'] = df_pricing['Target_Gross_Margin_%'].apply(clean_percent)
+    # Normalize: if data is 0.2, make it 20.0
+    if df_pricing['Min_Margin'].mean() < 1: df_pricing['Min_Margin'] *= 100
+    if df_pricing['Target_Margin'].mean() < 1: df_pricing['Target_Margin'] *= 100
     
     df_competitor['Avg_Competitor_Price'] = df_competitor['Avg_Competitor_Price'].apply(clean_currency)
     
-    df_returns['Returns_Qty'] = df_returns['Return Quantity \n(Last 90 days)'].apply(clean_numeric)
+    # Use exact column names from your files
+    # Try multiple common names for Returns just in case
+    ret_col = 'Return Quantity \n(Last 90 days)'
+    if ret_col not in df_returns.columns: ret_col = 'Returns' # Fallback
+    df_returns['Returns_Qty'] = df_returns[ret_col].apply(clean_numeric)
     
     df_inventory['Days_of_Supply'] = df_inventory['days-of-supply'].apply(clean_numeric)
 
     # Sales Aggregation for Return Rate Calc
-    # Ensure 'Units Ordered' is numeric
     df_sales['Units Ordered'] = pd.to_numeric(df_sales['Units Ordered'], errors='coerce').fillna(0)
     sales_agg = df_sales.groupby('SKU')['Units Ordered'].sum().reset_index()
 
@@ -83,9 +95,7 @@ df_master = load_and_prep_data()
 # ==========================================
 # 3. SIDEBAR: LOGO & SELECTOR
 # ==========================================
-# Try to load logo, otherwise fall back to text
 try:
-    # Width 250px usually looks best for sidebars
     st.sidebar.image("logo.png", width=150)
 except:
     st.sidebar.header("🌱 Karmic Seed")
@@ -102,11 +112,9 @@ default_inventory = 45.0
 default_returns = 2.5
 
 if not df_master.empty:
-    # Dropdown to select a real SKU
     sku_list = df_master['SKU'].unique().tolist()
     selected_sku = st.sidebar.selectbox("Choose SKU to Simulate:", sku_list)
     
-    # Get data for that SKU
     sku_data = df_master[df_master['SKU'] == selected_sku].iloc[0]
     
     # Pre-fill variables
@@ -160,13 +168,11 @@ def calculate_recommendation(cost, current_price, competitor_price, min_margin, 
     # 3. Liquidate (Inventory Pressure)
     elif inventory_days > 120:
         strategy = "📉 LIQUIDATE"
-        # Don't go below cost if possible, but move stock
         rec_price = max(cost * 1.05, competitor_price * 0.95)
         
     # 4. Market Catch-Up (Optimize)
     elif current_price < (competitor_price - 1.0) and margin_current < (target_margin/100):
         strategy = "🚀 MARKET CATCH-UP"
-        # Move toward ideal, but respect competitor ceiling
         rec_price = min(target_price_ideal, competitor_price - 0.50)
         
     return round(rec_price, 2), strategy, "optimize margin", margin_current
@@ -198,8 +204,6 @@ if st.button("Run Analysis", type="primary"):
     
     with col_chart:
         st.subheader("Price Position")
-        
-        # Calculate floors/ceilings for chart
         min_floor = cost_input/(1-min_margin_input/100)
         target_ideal = cost_input/(1-target_margin_input/100)
         
@@ -216,6 +220,7 @@ if st.button("Run Analysis", type="primary"):
         - **Min Margin Floor:** ${cost_input/(1-min_margin_input/100):.2f}
         - **Competitor Anchor:** ${comp_price_input:.2f}
         - **Inventory Health:** {inventory_input} days
+        - **Return Rate:** {returns_input}%
         """)
         
         if "RECOVERY" in strategy:
