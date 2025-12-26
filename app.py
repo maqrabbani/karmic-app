@@ -86,7 +86,7 @@ df_master = load_and_prep_data()
 # Try to load logo, otherwise fall back to text
 try:
     # Width 250px usually looks best for sidebars
-    st.sidebar.image("logo.png", width=250)
+    st.sidebar.image("logo.png", width=150)
 except:
     st.sidebar.header("🌱 Karmic Seed")
 
