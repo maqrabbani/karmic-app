@@ -1,0 +1,51 @@
+SKU,Product_description,Product Role,Country_of_Origin,FBA Fee,Storage Fee,Handling_Cost,Cost,Current_Price,Minimum_Acceptable_Margin_%,Target_Gross_Margin_%,True_Unit_Cost,Profit_per_Unit
+MN-01,Rectangle Tray -14 x 10 Inch - Pk of  25,Core,India,$15.11 ,$0.44 ,$0.75 ,$16.00 ,$38.90 ,20%,35%,$32.30 ,$6.60 
+MN-02,Rectangle Tray -12x10 - Pk of 25,Core,India,$13.55 ,$0.30 ,$0.75 ,$12.00 ,$33.90 ,20%,35%,$26.60 ,$7.30 
+MN-03,Oval Tray -15x10 Inch - Pk of  25,Core,India,$13.94 ,$0.34 ,$0.75 ,$15.00 ,$34.90 ,20%,35%,$30.03 ,$4.87 
+MN-04,Oval Tray - 13x9 Inch - pk of 25,Core,India,$12.89 ,$0.30 ,$0.75 ,$12.00 ,$29.90 ,20%,35%,$25.94 ,$3.96 
+MN-05,Christmas Tray - 17x12 Inch - Pk of 5,Seasonal,India,$11.80 ,$0.22 ,$0.75 ,$13.00 ,$21.90 ,25%,45%,$25.77 ,($3.87)
+MN-06,Star Tray - 14 Inch - Pk of 5,Seasonal,India,$8.50 ,$0.12 ,$0.75 ,$5.00 ,$14.95 ,25%,45%,$14.37 ,$0.58 
+MN-07,15 Round plate - pk of 10,Core,India,$17.85 ,$0.27 ,$0.75 ,$11.00 ,$34.90 ,20%,35%,$29.87 ,$5.03 
+MN-08,10 Inch Heart Plates - pk of 25,Seasonal,India,$12.11 ,$0.25 ,$0.75 ,$13.00 ,$29.90 ,25%,45%,$26.11 ,$3.79 
+MN-09,6 Inch Heart Plates - pk of 25,Seasonal,India,$8.08 ,$0.09 ,$0.75 ,$6.00 ,$14.90 ,25%,45%,$14.92 ,($0.02)
+MN-10,9x6 Rectangle - pk of 25,Core,India,$9.52 ,$0.13 ,$0.75 ,$7.00 ,$19.90 ,20%,35%,$17.40 ,$2.50 
+MN-11,Oval Tray - 13x9 Inch - pk of 10,Core,India,$9.36 ,$0.15 ,$0.75 ,$5.00 ,$16.90 ,20%,35%,$15.26 ,$1.64 
+MN-12,13 inch Round DEEP plate - pk of 10,Core,India,$10.90 ,$0.22 ,$0.75 ,$6.00 ,$19.90 ,20%,35%,$17.87 ,$2.03 
+MN-13,14 inch Round DEEP plate - Pk of 10,Core,India,$9.97 ,$0.08 ,$0.75 ,$7.00 ,$22.90 ,20%,35%,$17.80 ,$5.10 
+MN-14,12 inch Round plate - Pk of 25,Core,India,$12.82 ,$0.36 ,$0.75 ,$11.00 ,$26.90 ,20%,35%,$24.93 ,$1.97 
+MN-15,Rectangle Tray -14x10 Inch - Pk of  10,Core,India,$11.29 ,$0.20 ,$0.75 ,$7.00 ,$21.90 ,20%,35%,$19.24 ,$2.66 
+MN-16,Oval Tray -15x10 Inch - Pk of  10,Core,India,$10.46 ,$0.19 ,$0.75 ,$6.00 ,$19.90 ,20%,35%,$17.40 ,$2.50 
+MN-17,Square Combo 10 & 7 inch - Pk of 50,Core,India,$12.89 ,$0.34 ,$0.75 ,$14.00 ,$29.90 ,20%,35%,$27.98 ,$1.92 
+MN-18,Round Combo 10 & 7 inch - Pk of 50,Core,India,$12.61 ,$0.37 ,$0.75 ,$14.00 ,$26.90 ,20%,35%,$27.73 ,($0.83)
+MN-19,Oval Tray - 22x12 Inch - Pk of 10,Core,India,$19.68 ,$0.51 ,$0.75 ,$12.00 ,$36.90 ,20%,35%,$32.94 ,$3.96 
+MN-20,3.5 Inch round Bowl - Pk of 25,Core,India,$6.24 ,$0.03 ,$0.75 ,$4.00 ,$11.90 ,20%,35%,$11.02 ,$0.88 
+MN-21,11 x 7 Rectangle - Pk of 25,Core,India,$10.46 ,$0.19 ,$0.75 ,$8.00 ,$21.90 ,20%,35%,$19.40 ,$2.50 
+MN-22,13 inch Round plate - Pk of 10,Core,India,$11.12 ,$0.21 ,$0.75 ,$7.00 ,$20.90 ,20%,35%,$19.08 ,$1.82 
+MN-23,2.5 Inch round Bowl - 25 ml - Pk of 25,Core,India,$5.64 ,$0.01 ,$0.75 ,$4.00 ,$9.95 ,20%,35%,$10.40 ,($0.45)
+MN-24,Rectangle Tray -12x10 - pk of 10,Core,India,$9.72 ,$0.15 ,$0.75 ,$5.00 ,$19.90 ,20%,35%,$15.62 ,$4.28 
+MN-25,10 inch square -  pk of 50,Core,India,$14.05 ,$0.41 ,$0.75 ,$16.00 ,$34.90 ,20%,35%,$31.21 ,$3.69 
+MN-26,8 inch square -  pk of 50,Core,India,$12.87 ,0.23,$0.75 ,$13.00 ,$29.90 ,20%,35%,$26.85 ,$3.05 
+MN-27,7 inch square -  pk of 50,Core,India,$12.20 ,0.23,$0.75 ,$11.00 ,$28.90 ,20%,35%,$24.18 ,$4.72 
+MN-28,6 inch square -  pk of 50,Core,India,$10.56 ,0.16,$0.75 ,$11.00 ,$24.90 ,20%,35%,$22.47 ,$2.43 
+MN-29,4 inch square -  pk of 50,Core,India,$8.89 ,0.07,$0.75 ,$8.00 ,$21.90 ,20%,35%,$17.71 ,$4.19 
+MN-30,10 inch Round- pk of 50,Core,India,$18.10 ,0.38,$0.75 ,$16.00 ,$34.90 ,20%,35%,$35.23 ,($0.33)
+MN-31,8 Round -  pk of 50,Core,India,$12.56 ,0.24,$0.75 ,$13.00 ,$28.90 ,20%,35%,$26.55 ,$2.35 
+MN-32,7 Round -  pk of 50,Core,India,$11.96 ,0.2,$0.75 ,$11.00 ,$26.90 ,20%,35%,$23.91 ,$2.99 
+MN-33,6 Round -  pk of 50,Core,India,$10.27 ,0.14,$0.75 ,$11.00 ,$25.90 ,20%,35%,$22.16 ,$3.74 
+MN-34,9 Square - pk of 50,Core,India,$13.41 ,0.28,$0.75 ,$14.00 ,$32.90 ,20%,35%,$28.44 ,$4.46 
+MN-35,9 Round -  pk of 50,Core,India,$13.41 ,$0.33 ,$0.75 ,$14.00 ,$31.90 ,20%,35%,$28.49 ,$3.41 
+MN-36,17x12 - Oval Tray - pk of 10,Core,India,$13.03 ,$0.27 ,$0.75 ,$11.00 ,$29.90 ,20%,35%,$25.05 ,$4.85 
+MN-37,11 Square - pk of 25,Core,India,$11.96 ,$0.21 ,$0.75 ,$13.00 ,$28.90 ,20%,35%,$25.92 ,$2.98 
+MN-38,3.5 Round Bowl -  pk of 100,Core,India,$11.41 ,$0.13 ,,$14.00 ,$29.90 ,20%,35%,$25.54 ,$4.36 
+MN-39,2.5 Round Bowl -  pk of 100,Core,India,$9.11 ,$0.07 ,$0.75 ,$13.00 ,$24.90 ,20%,35%,$22.93 ,$1.97 
+MN-40,5 inch square -  pk of 50,Core,India,$9.81 ,$0.11 ,$0.75 ,$9.00 ,$23.90 ,20%,35%,$19.67 ,$4.23 
+MN-41,6 inch square -  pk of 200,Core,India,$21.15 ,$0.52 ,$0.75 ,$41.00 ,$78.90 ,20%,35%,$63.42 ,$15.48 
+MN-42,4 inch square -  pk of 200,Core,India,$18.74 ,$0.30 ,$0.75 ,$31.00 ,$73.90 ,20%,35%,$50.79 ,$23.11 
+MN-43,3.5 Square Bowl -  Pk of 25,Core,India,$6.03 ,$0.03 ,$0.75 ,$4.00 ,$13.90 ,20%,35%,$10.81 ,$3.09 
+MN-44,2.5 Square Bowl - Pk of 25,Core,India,$5.88 ,$0.03 ,$0.75 ,$3.00 ,$11.90 ,20%,35%,$9.66 ,$2.24 
+MN-45,3.5 Square Bowl -  Pk of 100,Core,India,$10.85 ,$0.08 ,$0.75 ,$14.00 ,$29.90 ,20%,35%,$25.68 ,$4.22 
+MN-46,2.5 Square Bowl - Pk of 100,Core,India,$9.17 ,$0.07 ,$0.75 ,$11.00 ,$26.90 ,20%,35%,$20.99 ,$5.91 
+MN-47,5 inch square -  pk of 200,Core,India,$20.21 ,$0.38 ,$0.75 ,$34.00 ,$76.90 ,20%,35%,$55.34 ,$21.56 
+MN-48,7 Square -  pk of 200,Core,India,$23.50 ,$0.73 ,$0.75 ,$44.00 ,$89.90 ,20%,35%,$68.98 ,$20.92 
+MN-49,11 x 7 Rectangle -  pk of 50,Core,India,$13.51 ,$0.30 ,$0.75 ,$16.00 ,$32.90 ,20%,35%,$30.56 ,$2.34 
+MN-50,9x6 Rectangle - pk of 50,Core,India,$12.58 ,$0.27 ,$0.75 ,$14.00 ,$29.90 ,20%,35%,$27.60 ,$2.30 
