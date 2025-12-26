@@ -68,8 +68,7 @@ df_master = load_and_prep_data()
 # ==========================================
 # 3. SIDEBAR: SELECT YOUR REAL SKU
 # ==========================================
-st.sidebar.header("📝 SKU Selector")
-
+st.sidebar.image("logo.png", width=200)
 if not df_master.empty:
     # Dropdown to select a real SKU
     sku_list = df_master['SKU'].unique().tolist()
