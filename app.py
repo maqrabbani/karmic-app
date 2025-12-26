@@ -102,7 +102,7 @@ except:
 
 
 st.sidebar.markdown("<div style='height: 50px;'></div>", unsafe_allow_html=True)
-st.sidebar.markdown("### 🛒 Product Simulator")
+st.sidebar.markdown("### 🍽️ Dashboard")
 
 # Defaults
 default_cost = 15.0
