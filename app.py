@@ -7,17 +7,7 @@ import numpy as np
 # ==========================================
 st.set_page_config(page_title="Karmic Seed Pricing Simulator", layout="wide")
 
-# --- CUSTOM CSS FOR WHITE SIDEBAR ---
-st.markdown("""
-<style>
-    [data-testid="stSidebar"] {
-        background-color: #FFFFFF;
-    }
-    [data-testid="stSidebarUserContent"] {
-        background-color: #FFFFFF;
-    }
-</style>
-""", unsafe_allow_html=True)
+
 
 st.title("Pricing Decision Support Tool")
 
