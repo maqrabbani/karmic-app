@@ -19,7 +19,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("Karmic Seed: Pricing Decision Support Tool")
+st.title("Pricing Decision Support Tool")
 
 # ==========================================
 # 2. DATA LOADER (The Brain)
