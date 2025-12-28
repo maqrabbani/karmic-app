@@ -8,7 +8,14 @@ import numpy as np
 st.set_page_config(page_title="Platinum Pricing Engine", layout="wide")
 
 
-st.title("💎 Platinum Pricing Simulator")
+st.title("# 🍽️ **Karmic Seed Assignment for XYZ Company**
+
+This analysis integrates historical sales, ad performance, pricing, competitor data, returns, and inventory health to:
+- Calculate advanced unit economics (CPA, return costs, net profit)
+- Optimize pricing suggestions
+- Generate actionable strategies
+- Visualize top 10 critical charts for business insights
+ Platinum Pricing Simulator")
 st.markdown("### Operational Offense/Defense Engine")
 st.markdown("---")
 
