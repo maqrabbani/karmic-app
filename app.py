@@ -7,25 +7,6 @@ import numpy as np
 # ==========================================
 st.set_page_config(page_title="Platinum Pricing Engine", layout="wide")
 
-# Custom CSS for "Executive" feel
-st.markdown("""
-<style>
-    .metric-card {
-        background-color: #f0f2f6;
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 5px solid #4CAF50;
-    }
-    .strategy-box {
-        padding: 15px;
-        border-radius: 5px;
-        text-align: center;
-        font-weight: bold;
-        font-size: 20px;
-        color: white;
-    }
-</style>
-""", unsafe_allow_html=True)
 
 st.title("💎 Platinum Pricing Simulator")
 st.markdown("### Operational Offense/Defense Engine")
