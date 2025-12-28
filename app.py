@@ -8,7 +8,7 @@ import numpy as np
 st.set_page_config(page_title="Platinum Pricing Engine", layout="wide")
 
 
-st.title("💎 Platinum Pricing Simulator")
+st.title("🍽️ XYZ Pricing Simulator")
 st.markdown("### Operational Offense/Defense Engine")
 
 # ==========================================
