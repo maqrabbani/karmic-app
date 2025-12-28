@@ -8,8 +8,9 @@ import numpy as np
 st.set_page_config(page_title="Platinum Pricing Engine", layout="wide")
 
 
-st.title("🍽️ XYZ Pricing Simulator")
+st.title("💎 Platinum Pricing Simulator")
 st.markdown("### Operational Offense/Defense Engine")
+st.markdown("---")
 
 # ==========================================
 # 2. ROBUST DATA LOADER
@@ -81,13 +82,17 @@ def load_data():
 df_master = load_data()
 
 # ==========================================
-# 3. SIDEBAR: SIMULATION INPUTS
+# 3. CONTROL PANEL (MOVED TO MAIN PAGE)
 # ==========================================
-st.sidebar.header("🔧 Simulation Controls")
 
+# --- SKU SELECTION ---
 if not df_master.empty:
     sku_list = df_master['SKU'].unique().tolist()
-    selected_sku = st.sidebar.selectbox("Select SKU:", sku_list)
+    # Create a small column for SKU selection so it doesn't take full width
+    col_sel, _ = st.columns([1, 3])
+    with col_sel:
+        selected_sku = st.selectbox("👉 Select SKU to Analyze:", sku_list)
+    
     row = df_master[df_master['SKU'] == selected_sku].iloc[0]
     
     # Pre-fill Defaults
@@ -105,109 +110,117 @@ else:
     def_cost = 10.0; def_price=20.0; def_comp=22.0; def_inv=45.0; def_ret=2.0
     def_spend = 500.0; def_adsales=2000.0; def_units=100.0; def_min_marg=20.0
 
-# --- INPUT WIDGETS ---
-st.sidebar.subheader("1. Core Economics")
-cost = st.sidebar.number_input("Unit Cost ($)", value=def_cost)
-curr_price = st.sidebar.number_input("Current Price ($)", value=def_price)
-comp_price = st.sidebar.number_input("Competitor Price ($)", value=def_comp)
+# --- INPUT COLUMNS (3-Column Layout) ---
+input_c1, input_c2, input_c3 = st.columns(3)
 
-st.sidebar.subheader("2. Health Signals")
-inv_days = st.sidebar.number_input("Days of Supply", value=def_inv)
-ret_rate = st.sidebar.slider("Return Rate (%)", 0.0, 20.0, def_ret)
-min_margin = st.sidebar.slider("Min Margin (%)", 0.0, 50.0, def_min_marg)
+with input_c1:
+    st.markdown("#### 1. Core Economics")
+    cost = st.number_input("Unit Cost ($)", value=def_cost)
+    curr_price = st.number_input("Current Price ($)", value=def_price)
+    comp_price = st.number_input("Competitor Price ($)", value=def_comp)
 
-st.sidebar.subheader("3. Ad Performance")
-ad_spend = st.sidebar.number_input("Total Ad Spend ($)", value=def_spend)
-ad_sales = st.sidebar.number_input("Total Ad Sales ($)", value=def_adsales)
-total_units = st.sidebar.number_input("Total Units Sold", value=def_units)
+with input_c2:
+    st.markdown("#### 2. Health Signals")
+    inv_days = st.number_input("Days of Supply", value=def_inv)
+    ret_rate = st.slider("Return Rate (%)", 0.0, 20.0, def_ret)
+    min_margin = st.slider("Min Margin (%)", 0.0, 50.0, def_min_marg)
 
-# ==========================================
-# 4. PLATINUM LOGIC ENGINE
-# ==========================================
-def run_platinum_engine(p_cost, p_price, p_comp, p_inv, p_ret, p_spend, p_adsales, p_units, p_min_margin):
+with input_c3:
+    st.markdown("#### 3. Ad Performance")
+    ad_spend = st.number_input("Total Ad Spend ($)", value=def_spend)
+    ad_sales = st.number_input("Total Ad Sales ($)", value=def_adsales)
+    total_units = st.number_input("Total Units Sold", value=def_units)
+
+st.markdown("") # Spacing
+
+# --- BIG ACTION BUTTON ---
+if st.button("🚀 ANALYZE & RECOMMEND", type="primary", use_container_width=True):
+    
+    # ==========================================
+    # 4. PLATINUM LOGIC ENGINE
+    # ==========================================
     
     # 1. Advanced Unit Economics
-    cpa = p_spend / p_units if p_units > 0 else 0
-    actual_acos = (p_spend / p_adsales * 100) if p_adsales > 0 else 0
+    cpa = ad_spend / total_units if total_units > 0 else 0
+    actual_acos = (ad_spend / ad_sales * 100) if ad_sales > 0 else 0
     
     # Refund Tax Calculation
     refund_tax = 0
-    if p_ret > 8.1:
-        refund_tax = (p_ret / 100) * p_price
+    if ret_rate > 8.1:
+        refund_tax = (ret_rate / 100) * curr_price
         
-    total_cost = p_cost + cpa + refund_tax
-    net_profit = p_price - total_cost
+    total_cost = cost + cpa + refund_tax
+    net_profit = curr_price - total_cost
     
     # Break-Even ACOS
-    margin_dollar = p_price - (p_cost + refund_tax)
-    be_acos = (margin_dollar / p_price) * 100 if p_price > 0 else 0
+    margin_dollar = curr_price - (cost + refund_tax)
+    be_acos = (margin_dollar / curr_price) * 100 if curr_price > 0 else 0
     
     # 2. Logic Gates
-    rec_price = p_price
+    rec_price = curr_price
     strategy = "MAINTAIN"
     reason = "Metrics stable."
     bg_color = "gray"
 
     # A. HARD BLOCK (Quality)
-    if p_ret > 8.1:
-        return p_price, "⛔ BLOCK HIKE", f"Refund Tax Applied (${refund_tax:.2f}). Quality Issue.", "red", net_profit, be_acos, actual_acos, refund_tax
+    if ret_rate > 8.1:
+        strat_res = "⛔ BLOCK HIKE"
+        reason = f"Refund Tax Applied (${refund_tax:.2f}). Quality Issue."
+        bg_color = "#d63031" # Red
+        rec_price = curr_price # No change
 
     # B. LIQUIDATION (Zombie Stock)
-    if p_inv > 180:
-        rec_price = max(p_cost * 1.05, p_comp * 0.95)
+    elif inv_days > 180:
+        rec_price = max(cost * 1.05, comp_price * 0.95)
         strategy = "📉 LIQUIDATE"
         reason = "Zombie Stock (>180 days). Flush cash."
         bg_color = "#d63031" # Red
 
     # C. DEFENSE (Ad Bleed)
     elif actual_acos > be_acos:
-        rec_price = p_price # Don't move price yet
+        rec_price = curr_price # Don't move price yet
         strategy = "🛡️ DEFENSE (CUT ADS)"
         reason = f"Actual ACOS ({actual_acos:.1f}%) > Break-Even ({be_acos:.1f}%). Cut spend."
         bg_color = "#e17055" # Orange
 
     # D. PROFIT RECOVERY
     elif net_profit < 0:
-        rec_price = total_cost / (1 - (p_min_margin/100))
+        rec_price = total_cost / (1 - (min_margin/100))
         strategy = "📈 PROFIT RECOVERY"
         reason = "Unit Economics negative. Must raise price."
         bg_color = "#fdcb6e" # Yellow
 
     # E. OFFENSE (Growth)
-    elif (actual_acos < be_acos * 0.8) and (p_inv < 90) and (p_price < p_comp):
-        rec_price = min(p_comp, p_price * 1.05)
+    elif (actual_acos < be_acos * 0.8) and (inv_days < 90) and (curr_price < comp_price):
+        rec_price = min(comp_price, curr_price * 1.05)
         strategy = "⚔️ OFFENSE (SCALE)"
         reason = "High Efficiency & Low Price. Boost Ads + Hike Price."
         bg_color = "#00b894" # Green
 
     # F. CATCH UP
-    elif p_price < p_comp * 0.9:
-        rec_price = p_comp * 0.95
+    elif curr_price < comp_price * 0.9:
+        rec_price = comp_price * 0.95
         strategy = "🚀 CATCH UP"
         reason = "Significant gap to competitor."
         bg_color = "#0984e3" # Blue
-
-    return rec_price, strategy, reason, bg_color, net_profit, be_acos, actual_acos, refund_tax
-
-# ==========================================
-# 5. RUN SIMULATION & DISPLAY
-# ==========================================
-if st.sidebar.button("👉 Run Simulation", type="primary"):
     
-    rec_price, strat, reason, color, profit, be_acos, act_acos, ref_tax = run_platinum_engine(
-        cost, curr_price, comp_price, inv_days, ret_rate, ad_spend, ad_sales, total_units, min_margin
-    )
+    else:
+        # Default fallback if no conditions met
+        strategy = "MAINTAIN"
+        bg_color = "#636e72"
+
+    st.markdown("---")
     
     # --- HEADER METRICS ---
     c1, c2, c3 = st.columns(3)
     c1.metric("Recommended Price", f"${rec_price:.2f}", delta=f"{rec_price - curr_price:.2f}")
-    c2.metric("Projected Unit Profit", f"${profit:.2f}", delta_color="normal")
+    c2.metric("Projected Unit Profit", f"${net_profit:.2f}", delta_color="normal")
     c3.metric("Inventory Age", f"{int(inv_days)} Days", delta="CRITICAL" if inv_days > 180 else "OK", delta_color="inverse")
 
     # --- STRATEGY BANNER ---
     st.markdown(f"""
-    <div style="background-color: {color}; padding: 15px; border-radius: 10px; color: white; text-align: center; margin-bottom: 20px;">
-        <h2 style="margin:0;">{strat}</h2>
+    <div style="background-color: {bg_color}; padding: 15px; border-radius: 10px; color: white; text-align: center; margin-bottom: 20px;">
+        <h2 style="margin:0;">{strategy}</h2>
         <p style="margin:0; font-size: 18px;">{reason}</p>
     </div>
     """, unsafe_allow_html=True)
@@ -220,29 +233,28 @@ if st.sidebar.button("👉 Run Simulation", type="primary"):
         # Visualizing the stack
         chart_data = pd.DataFrame({
             "Component": ["1. COGS", "2. Refund Tax", "3. Ad CPA", "4. Net Profit"],
-            "Value": [cost, ref_tax, (ad_spend/total_units if total_units else 0), profit]
+            "Value": [cost, refund_tax, (ad_spend/total_units if total_units else 0), net_profit]
         })
         st.bar_chart(chart_data.set_index("Component"))
-        if ref_tax > 0:
-            st.error(f"⚠️ Refund Tax of ${ref_tax:.2f} applied due to high return rate (>8.1%)")
+        if refund_tax > 0:
+            st.error(f"⚠️ Refund Tax of ${refund_tax:.2f} applied due to high return rate (>8.1%)")
 
     with col_right:
         st.subheader("🎯 ACOS Gap Analysis")
         
         # Simple progress bar visualization for ACOS
-        st.write(f"**Actual ACOS: {act_acos:.1f}%**")
-        st.progress(min(act_acos/100, 1.0))
+        st.write(f"**Actual ACOS: {actual_acos:.1f}%**")
+        st.progress(min(actual_acos/100, 1.0))
         
         st.write(f"**Break-Even ACOS: {be_acos:.1f}%**")
         st.progress(min(be_acos/100, 1.0))
         
-        if act_acos > be_acos:
+        if actual_acos > be_acos:
             st.warning("📉 You are spending more on ads than your margin allows (Parasite Loss).")
         else:
             st.success("✅ Ad spend is profitable. Room to scale.")
-
 else:
-    st.info("👈 Adjust parameters in the sidebar and click 'Run Simulation'")
+    st.info("👆 Adjust the parameters above and click 'ANALYZE & RECOMMEND' to see the strategy.")
 
 # Footer
 st.markdown("---")
