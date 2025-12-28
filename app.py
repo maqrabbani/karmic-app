@@ -8,7 +8,7 @@ import numpy as np
 st.set_page_config(page_title="Platinum Pricing Engine", layout="wide")
 
 
-st.title("# 🍽️ **Karmic Seed Assignment for XYZ Company**
+st.title("🍽️ XYZ Pricing Simulator")
 
 This analysis integrates historical sales, ad performance, pricing, competitor data, returns, and inventory health to:
 - Calculate advanced unit economics (CPA, return costs, net profit)
