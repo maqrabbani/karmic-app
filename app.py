@@ -9,7 +9,7 @@ st.set_page_config(page_title="Platinum Pricing Engine", layout="wide")
 
 
 st.title("🍽️ XYZ Pricing Simulator")
-st.markdown("### Operational Offense/Defense Engine")
+st.markdown("### Operational Planning Engine")
 
 # ==========================================
 # 2. ROBUST DATA LOADER
